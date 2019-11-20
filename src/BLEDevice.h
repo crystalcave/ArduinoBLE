@@ -60,6 +60,7 @@ public:
   String advertisedServiceUuid(int index) const;
 
   virtual int rssi();
+  virtual int phy(uint8_t* tx, uint8_t* rx);
 
   bool connect();
   bool discoverAttributes();

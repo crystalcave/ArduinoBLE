@@ -195,6 +195,21 @@ int BLEDevice::rssi()
   return _rssi;
 }
 
+int BLEDevice::phy(uint8_t* tx, uint8_t* rx)
+{
+  int result = -1;
+  uint16_t handle = ATT.connectionHandle(_addressType, _address);
+
+  if (handle != 0xffff) {
+    uint8_t _tx, _rx;
+    result = HCI.leReadPhy(handle, _tx, _rx);
+    *tx = _tx;
+    *rx = _rx;
+  }
+
+  return result;
+}
+
 bool BLEDevice::connect()
 {
   return ATT.connect(_addressType, _address);
@@ -509,4 +524,3 @@ bool BLEDevice::discovered()
   // expect, 0x03 or 0x04 flag to be set
   return (_advertisementTypeMask & 0x18) != 0;
 }
-

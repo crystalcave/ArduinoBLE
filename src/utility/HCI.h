@@ -39,6 +39,9 @@ public:
   int readBdAddr(uint8_t addr[6]);
 
   int readRssi(uint16_t handle);
+  int leSetDefaultPhy(uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys);
+  int leSetPhy(uint16_t handle, uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys, uint16_t phyOptions);
+  int leReadPhy(uint16_t handle, uint8_t& txPhy, uint8_t& rxPhy);
 
   int setEventMask(uint64_t eventMask);
 

@@ -39,7 +39,7 @@ public:
 
   String address() const;
 
- int rssi();
+  int rssi();
 
   void setAdvertisedServiceUuid(const char* advertisedServiceUuid);
   void setAdvertisedService(const BLEService& service);
@@ -69,6 +69,8 @@ public:
   void setAdvertisingInterval(uint16_t advertisingInterval);
   void setConnectionInterval(uint16_t minimumConnectionInterval, uint16_t maximumConnectionInterval);
   void setConnectable(bool connectable); 
+
+  void setDefaultPhy(uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask);
 
   void setTimeout(unsigned long timeout);
 

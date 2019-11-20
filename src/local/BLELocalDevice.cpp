@@ -170,6 +170,11 @@ int BLELocalDevice::rssi()
   return 127;
 }
 
+void BLELocalDevice::setDefaultPhy(uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask)
+{
+  HCI.leSetDefaultPhy(allPhysMask, txPhysMask, rxPhysMask);
+}
+
 void BLELocalDevice::setAdvertisedServiceUuid(const char* advertisedServiceUuid)
 {
   GAP.setAdvertisedServiceUuid(advertisedServiceUuid);

@@ -69,6 +69,9 @@
 #define OCF_LE_CREATE_CONN                0x000d
 #define OCF_LE_CANCEL_CONN                0x000e
 #define OCF_LE_CONN_UPDATE                0x0013
+#define OCF_LE_READ_PHY                   0x0030
+#define OCF_LE_SET_DEFAULT_PHY            0x0031
+#define OCF_LE_SET_PHY                    0x0032
 
 #define HCI_OE_USER_ENDED_CONNECTION 0x13
 
@@ -221,6 +224,43 @@ int HCIClass::readRssi(uint16_t handle)
 
   return rssi;
 }
+
+int HCIClass::leSetDefaultPhy(uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask)
+{
+  int result = -1;
+
+  struct __attribute__ ((packed)) HCILeDefaultPhy {
+    uint8_t all_phys;
+    uint8_t tx_phys;
+    uint8_t rx_phys;
+  } leDefaultPhy;
+
+  leDefaultPhy.all_phys = allPhysMask;
+  leDefaultPhy.tx_phys = txPhysMask;
+  leDefaultPhy.tx_phys = rxPhysMask;
+
+  result = sendCommand(OGF_LE_CTL << 10 | OCF_LE_SET_DEFAULT_PHY, sizeof(leDefaultPhy), &leDefaultPhy);
+  return result;
+}
+
+int HCIClass::leReadPhy(uint16_t handle, uint8_t& txPhy, uint8_t& rxPhy)
+{
+  int result = sendCommand(OGF_LE_CTL << 10 | OCF_LE_READ_PHY, sizeof(handle), &handle);
+
+  if (result == 0) {
+    struct __attribute__ ((packed)) HCILePhy {
+      uint16_t handle;
+      uint8_t tx_phy;
+      uint8_t rx_phy;
+    } *lePhy = (HCILePhy*)_cmdResponse;
+
+    txPhy = lePhy->tx_phy;
+    rxPhy = lePhy->rx_phy;
+  }
+
+  return result;
+}
+
 
 int HCIClass::setEventMask(uint64_t eventMask)
 {

@@ -75,6 +75,10 @@ private:
   uint16_t _advertisingInterval;
   bool _connectable;
 
+  uint8_t _defaultAllPyhsMask;
+  uint8_t _defaultTxPyhsMask;
+  uint8_t _defaultRxPyhsMask;
+
   uint16_t _serviceDataUuid;
   const uint8_t* _serviceData;
   int _serviceDataLength;
