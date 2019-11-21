@@ -227,9 +227,8 @@ int HCIClass::readRssi(uint16_t handle)
 
 int HCIClass::leSetDefaultPhy(uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask)
 {
-  int result = -1;
 
-  struct __attribute__ ((packed)) HCILeDefaultPhy {
+  struct __attribute__((packed)) HCILeDefaultPhy {
     uint8_t all_phys;
     uint8_t tx_phys;
     uint8_t rx_phys;
@@ -237,10 +236,9 @@ int HCIClass::leSetDefaultPhy(uint8_t allPhysMask, uint8_t txPhysMask, uint8_t r
 
   leDefaultPhy.all_phys = allPhysMask;
   leDefaultPhy.tx_phys = txPhysMask;
-  leDefaultPhy.tx_phys = rxPhysMask;
+  leDefaultPhy.rx_phys = rxPhysMask;
 
-  result = sendCommand(OGF_LE_CTL << 10 | OCF_LE_SET_DEFAULT_PHY, sizeof(leDefaultPhy), &leDefaultPhy);
-  return result;
+  return sendCommand(OGF_LE_CTL << 10 | OCF_LE_SET_DEFAULT_PHY, sizeof(leDefaultPhy), &leDefaultPhy);
 }
 
 int HCIClass::leReadPhy(uint16_t handle, uint8_t& txPhy, uint8_t& rxPhy)
@@ -254,13 +252,44 @@ int HCIClass::leReadPhy(uint16_t handle, uint8_t& txPhy, uint8_t& rxPhy)
       uint8_t rx_phy;
     } *lePhy = (HCILePhy*)_cmdResponse;
 
-    txPhy = lePhy->tx_phy;
-    rxPhy = lePhy->rx_phy;
+    if (lePhy->handle == handle) {
+      txPhy = lePhy->tx_phy;
+      rxPhy = lePhy->rx_phy;
+    }
   }
 
   return result;
 }
 
+int HCIClass::leSetPhy(uint16_t handle, uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask, uint16_t phyOptionsMask)
+{
+  struct __attribute__((packed)) HCILePhy {
+    uint16_t handle;
+    uint8_t all_phys;
+    uint8_t tx_phys;
+    uint8_t rx_phys;
+    uint16_t options;
+  } lePhy;
+
+  lePhy.handle = handle;
+  lePhy.all_phys = allPhysMask;
+  lePhy.tx_phys = txPhysMask;
+  lePhy.rx_phys = rxPhysMask;
+  lePhy.options = phyOptionsMask;
+
+  Serial.print("Handle: 0x");
+  Serial.println(lePhy.handle, HEX);
+  Serial.print("ALL Mask: 0x");
+  Serial.println(lePhy.all_phys, HEX);
+  Serial.print("TX Mask:  0x");
+  Serial.println(lePhy.tx_phys, HEX);
+  Serial.print("RX Mask:  0x");
+  Serial.println(lePhy.rx_phys, HEX);
+  Serial.print("Options:  0x");
+  Serial.println(lePhy.options, HEX);
+
+  return sendCommand(OGF_LE_CTL << 10 | OCF_LE_SET_PHY, sizeof(lePhy), &lePhy);  
+}
 
 int HCIClass::setEventMask(uint64_t eventMask)
 {

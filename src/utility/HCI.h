@@ -40,7 +40,7 @@ public:
 
   int readRssi(uint16_t handle);
   int leSetDefaultPhy(uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys);
-  int leSetPhy(uint16_t handle, uint8_t allPhys, uint8_t txPhys, uint8_t rxPhys, uint16_t phyOptions);
+  int leSetPhy(uint16_t handle, uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask, uint16_t phyOptionsMask);
   int leReadPhy(uint16_t handle, uint8_t& txPhy, uint8_t& rxPhy);
 
   int setEventMask(uint64_t eventMask);
