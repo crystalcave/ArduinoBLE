@@ -201,10 +201,22 @@ int BLEDevice::phy(uint8_t* tx, uint8_t* rx)
   uint16_t handle = ATT.connectionHandle(_addressType, _address);
 
   if (handle != 0xffff) {
-    uint8_t _tx, _rx;
-    result = HCI.leReadPhy(handle, _tx, _rx);
-    *tx = _tx;
-    *rx = _rx;
+    result = HCI.leReadPhy(handle, *tx, *rx);
+  }
+
+  return result;
+}
+
+int BLEDevice::setLongRange(bool longRange)
+{
+  int result = 0;
+  uint16_t handle = ATT.connectionHandle(_addressType, _address);
+
+  if (handle != 0xffff) {
+    if (longRange)
+      result = HCI.leSetPhy(handle, 0x02, 0x04, 0x00, 0x02);
+    else
+      result = HCI.leSetPhy(handle, 0x00, 0x03, 0x03, 0x00);
   }
 
   return result;

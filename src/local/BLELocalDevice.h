@@ -70,7 +70,7 @@ public:
   void setConnectionInterval(uint16_t minimumConnectionInterval, uint16_t maximumConnectionInterval);
   void setConnectable(bool connectable); 
 
-  void setDefaultPhy(uint8_t allPhysMask, uint8_t txPhysMask, uint8_t rxPhysMask);
+  int setLongRange();
 
   void setTimeout(unsigned long timeout);
 

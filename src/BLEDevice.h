@@ -61,6 +61,7 @@ public:
 
   virtual int rssi();
   virtual int phy(uint8_t* tx, uint8_t* rx);
+  virtual int setLongRange(bool longRange = true);
 
   bool connect();
   bool discoverAttributes();
