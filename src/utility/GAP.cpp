@@ -257,6 +257,19 @@ void GAPClass::setConnectable(bool connectable)
   _connectable = connectable;
 }
 
+int GAPClass::setDefaultPhys(uint8_t txPhysMask, uint8_t rxPhysMask)
+{
+  uint8_t allPhysMask = BLE_PHY_ALL_N;
+
+  // Preferred TX/RF flag must be false if host has preference
+  if (txPhysMask != BLE_PHY_NOT_SET)
+    allPhysMask &= ~BLE_PHY_TX_MASK;
+  if (rxPhysMask != BLE_PHY_NOT_SET)
+    allPhysMask &= ~BLE_PHY_RX_MASK;
+
+  return HCI.leSetDefaultPhy(allPhysMask, txPhysMask, rxPhysMask);
+}
+
 void GAPClass::setEventHandler(BLEDeviceEvent event, BLEDeviceEventHandler eventHandler)
 {
   if (event == BLEDiscovered) {

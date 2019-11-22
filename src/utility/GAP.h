@@ -47,6 +47,7 @@ public:
 
   void setAdvertisingInterval(uint16_t advertisingInterval);
   void setConnectable(bool connectable);
+  int setDefaultPhys(uint8_t txPhysMask, uint8_t rxPhysMask);
 
   void setEventHandler(BLEDeviceEvent event, BLEDeviceEventHandler eventHandler);
 
