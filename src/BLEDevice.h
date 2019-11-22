@@ -32,6 +32,18 @@ enum BLEDeviceEvent {
   BLEDeviceLastEvent
 };
 
+#define BLE_PHY_ALL_N           0x03
+#define BLE_PHY_TX_MASK         0x01
+#define BLE_PHY_RX_MASK         0x02
+#define BLE_PHY_1MBPS           0x01
+#define BLE_PHY_2MBPS           0x02
+#define BLE_PHY_CODED           0x04
+#define BLE_PHY_NOT_SET         0x00
+#define BLE_PHYS_SUPPORTED      (BLE_PHY_1MBPS | BLE_PHY_2MBPS | BLE_PHY_CODED)
+#define BLE_PHY_OPTS_NONE       0x00
+#define BLE_PHY_OPTS_S2         0x01
+#define BLE_PHY_OPTS_S8         0x02
+
 class BLEDevice;
 
 typedef void (*BLEDeviceEventHandler)(BLEDevice device);
@@ -60,7 +72,7 @@ public:
   String advertisedServiceUuid(int index) const;
 
   virtual int rssi();
-  virtual int phy(uint8_t* tx, uint8_t* rx);
+  virtual int phys(uint8_t* tx, uint8_t* rx);
   virtual int setLongRange(bool longRange = true);
 
   bool connect();

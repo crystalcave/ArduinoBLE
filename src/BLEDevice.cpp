@@ -195,7 +195,7 @@ int BLEDevice::rssi()
   return _rssi;
 }
 
-int BLEDevice::phy(uint8_t* tx, uint8_t* rx)
+int BLEDevice::phys(uint8_t* tx, uint8_t* rx)
 {
   int result = -1;
   uint16_t handle = ATT.connectionHandle(_addressType, _address);
@@ -213,10 +213,14 @@ int BLEDevice::setLongRange(bool longRange)
   uint16_t handle = ATT.connectionHandle(_addressType, _address);
 
   if (handle != 0xffff) {
-    if (longRange)
-      result = HCI.leSetPhy(handle, 0x02, 0x04, 0x00, 0x02);
-    else
-      result = HCI.leSetPhy(handle, 0x00, 0x03, 0x03, 0x00);
+    uint8_t allPhysMask = BLE_PHY_ALL_N;
+    if (longRange) {
+      allPhysMask &= ~BLE_PHY_TX_MASK;
+      result = HCI.leSetPhy(handle, allPhysMask, BLE_PHY_CODED, BLE_PHY_NOT_SET, BLE_PHY_OPTS_S8);
+    } else {
+      allPhysMask &= ~BLE_PHY_ALL_N;
+      result = HCI.leSetPhy(handle, allPhysMask, BLE_PHYS_SUPPORTED, BLE_PHYS_SUPPORTED, BLE_PHY_OPTS_NONE);
+    }
   }
 
   return result;
