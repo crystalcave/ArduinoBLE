@@ -70,7 +70,7 @@ public:
   void setConnectionInterval(uint16_t minimumConnectionInterval, uint16_t maximumConnectionInterval);
   void setConnectable(bool connectable); 
 
-  int setLongRange();
+  int setDefaultPhys(uint8_t txPhysMask = BLE_PHYS_SUPPORTED, uint8_t rxPhysMask = BLE_PHYS_SUPPORTED);
 
   void setTimeout(unsigned long timeout);
 
